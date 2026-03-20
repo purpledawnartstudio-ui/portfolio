@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photography Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #fff;
+      color: #1a1917;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 2.5rem;
+      background: rgba(255,255,255,0.95);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 1.3rem;
+      letter-spacing: 0.1em;
+      color: #1a1917;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #888;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #1a1917; }
+
+    /* ── HERO ── */
+    .hero {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #f5f2ee;
+    }
+    /* ★ 首頁大圖：photos/DSC00448.JPG ★ */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('photos/DSC00183.JPG');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.75);
+      transition: transform 8s ease;
+    }
+    .hero:hover .hero-bg { transform: scale(1.03); }
+    .hero-content {
+      position: relative;
+      text-align: center;
+      color: #fff;
+      animation: fadeUp 1.2s ease both;
+    }
+    .hero-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 1.2rem;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+    .hero-title em {
+      font-style: italic;
+      display: block;
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .hero-scroll span {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 44px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0; transform: scaleY(0.3); transform-origin: top; }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── PHOTO GRID ── */
+    .section-grid {
+      padding: 5rem 2.5rem;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(0,0,0,0.1);
+    }
+    .photo-grid {
+      columns: 3;
+      column-gap: 6px;
+    }
+    .photo-item {
+      break-inside: avoid;
+      margin-bottom: 6px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: #f0ede8;
+    }
+    .photo-item img {
+      width: 100%;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.25,0.1,0.25,1), filter 0.5s;
+      filter: brightness(0.95);
+    }
+    .photo-item:hover img {
+      transform: scale(1.04);
+      filter: brightness(1);
+    }
+    .photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.65);
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem 1.2rem;
+    }
+    .photo-item:hover .photo-overlay { opacity: 1; }
+    .photo-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: #1a1917;
+      transform: translateY(5px);
+      transition: transform 0.3s;
+    }
+    .photo-item:hover .photo-label { transform: translateY(0); }
+
+    /* ── ABOUT ── */
+    .section-about {
+      padding: 5rem 2.5rem;
+      border-top: 1px solid rgba(0,0,0,0.07);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    /* ★ 關於我照片：換成你自己的路徑 ★ */
+    .about-img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      display: block;
+      background: #f0ede8 url('photos/DSC00448.JPG') center/cover no-repeat;
+    }
+    .about-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 1rem;
+    }
+    .about-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    .about-title em { font-style: italic; }
+    .about-text {
+      font-size: 0.92rem;
+      font-weight: 300;
+      line-height: 1.9;
+      color: #666;
+    }
+    .about-text + .about-text { margin-top: 1rem; }
+    .about-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+      line-height: 1;
+      color: #1a1917;
+    }
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-top: 0.3rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 1.5rem 2.5rem;
+      border-top: 1px solid rgba(0,0,0,0.07);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: #bbb;
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.97);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 88vw;
+      max-height: 88vh;
+      object-fit: contain;
+    }
+    .lb-close {
+      position: fixed;
+      top: 1.5rem; right: 2rem;
+      background: none; border: none;
+      font-size: 2rem; color: #aaa;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .lb-close:hover { color: #1a1917; }
+    .lb-nav {
+      position: fixed;
+      top: 50%; transform: translateY(-50%);
+      background: none;
+      border: 1px solid rgba(0,0,0,0.1);
+      color: #aaa; font-size: 1.4rem;
+      cursor: pointer;
+      width: 48px; height: 48px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .lb-nav:hover { color: #1a1917; border-color: #1a1917; }
+    .lb-prev { left: 1.5rem; }
+    .lb-next { right: 1.5rem; }
+
+    @media (max-width: 900px) {
+      .section-about { grid-template-columns: 1fr; gap: 3rem; }
+    }
+    @media (max-width: 768px) {
+      .photo-grid { columns: 2; }
+      nav { padding: 1rem 1.5rem; }
+      .section-grid, .section-about { padding: 3rem 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      .photo-grid { columns: 1; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">YOYO PHOTO</a>
+    <ul class="nav-links">
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Photography</p>
+      <h1 class="hero-title">Capturing<em>Moments</em></h1>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO GRID -->
+  <section class="section-grid" id="portfolio">
+    <div class="section-header">
+      <h2 class="section-title">Portfolio</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="photo-grid" id="grid"></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section-about" id="about">
+    <div class="about-img"></div>
+    <div class="about-content">
+      <p class="about-eyebrow">About</p>
+      <h2 class="about-title">光影<em>生活</em><br>建築 攝影</h2>
+      <!-- ★ 在這裡修改你的自我介紹文字 ★ -->
+      <p class="about-text">我是一名致力藝術的攝影師，致力於捕捉每一個轉瞬即逝的珍貴瞬間。無論是建築光影、人像的靈魂眼神，還是自然風景的壯闊之美，每一張照片都有它獨特的故事。</p>
+      <p class="about-text">我的攝影輕鬆自然，讓人鏡頭前展現最真實的自己，呈現最動人的影像記憶。</p>
+      <div class="about-stats">
+        <div>
+          <div class="stat-num">2026</div>
+          <div class="stat-label">年</div>
+        </div>
+        <div>
+          <div class="stat-num"> </div>
+          <div class="stat-label">作品</div>
+        </div>
+        <div>
+          <div class="stat-num"> </div>
+          <div class="stat-label">攝影</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Your Name Photography</p>
+    <p>© 2025 All rights reserved</p>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLb(event)">
+    <button class="lb-close" onclick="closeLbBtn()">×</button>
+    <button class="lb-nav lb-prev" onclick="navLb(-1)">&#8249;</button>
+    <img id="lbImg" src="" alt="" />
+    <button class="lb-nav lb-next" onclick="navLb(1)">&#8250;</button>
+  </div>
+
+  <script>
+    // ══════════════════════════════════════════
+    // ★ 在這裡填入你的作品集照片 ★
+    // src   → 照片路徑，例如 'photos/photo1.JPG'
+    // label → 滑鼠移上去時顯示的標題（可留空 ''）
+    // ══════════════════════════════════════════
+    const photos = [
+      { src: 'photos/DSC00208.JPG',  label: '秋虹谷' },
+      { src: 'photos/DSC00456.JPG',  label: 'SANNA' },
+      { src: 'photos/DSC00161.JPG',  label: '酒廠' },
+      { src: 'photos/DSC00101.JPG',  label: '美術館' },
+      { src: 'photos/DSC00480.JPG',  label: '雕飾' },
+      { src: 'photos/DSC00341.JPG',  label: '公園' },
+      { src: 'photos/DSC00297.JPG',  label: '湧泉公園' },
+      { src: 'photos/DSC00424.JPG',  label: '排列' },
+      { src: 'photos/DSC00511.JPG',  label: '綠美圖' },
+    ];
+    // ══════════════════════════════════════════
+
+    const grid = document.getElementById('grid');
+    photos.forEach((p, i) => {
+      const item = document.createElement('div');
+      item.className = 'photo-item';
+      item.innerHTML = `
+        <img src="${p.src}" alt="${p.label}" loading="lazy" />
+        <div class="photo-overlay"><div class="photo-label">${p.label}</div></div>
+      `;
+      item.addEventListener('click', () => openLb(i));
+      grid.appendChild(item);
+    });
+
+    let cur = 0;
+    function openLb(i) {
+      cur = i;
+      document.getElementById('lbImg').src = photos[i].src;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLbBtn() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function closeLb(e) {
+      if (e.target === document.getElementById('lightbox')) closeLbBtn();
+    }
+    function navLb(d) {
+      cur = (cur + d + photos.length) % photos.length;
+      document.getElementById('lbImg').src = photos[cur].src;
+    }
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'ArrowLeft') navLb(-1);
+      if (e.key === 'ArrowRight') navLb(1);
+      if (e.key === 'Escape') closeLbBtn();
+    });
+
+    // smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+  </script>
+</body>
+</html>
